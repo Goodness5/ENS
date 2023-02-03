@@ -1,0 +1,6 @@
+{
+    // "diffEditor.maxFileSize": 30,
+    "editor.codeLensFontSize": 0,
+    "editor.minimap.size": "fit",
+    "markdown.preview.fontSize": 10
+}
