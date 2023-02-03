@@ -6,6 +6,14 @@ contract Name {
     address public aaddress;
     string public name;
 
+    //  struct registered{
+    //         string name;
+    // }
+
+    // mapping(address => name) registered;
+
+   
+
      event Logregister(string newName, address indexed sender);
       event Logdetails(string newName, address indexed sender);
        event LogChangeName(string newName, address indexed sender);
@@ -48,6 +56,20 @@ contract Name {
             _aaddress = aaddress;
 
             emit Logcheckowner(msg.sender);
+}
+
+    function del(string memory x) public returns(address y) {  
+
+        name = x;      
+        y = msg.sender;                                                               
+        require((keccak256(abi.encodePacked(x))) == keccak256(abi.encodePacked(name)));                                                                         
+       delete x;
+       delete y;                                    
+} 
+
+function listAll() public view returns(string memory _name , address _aaddress){
+    _name = name;
+    _aaddress = aaddress;
 }
 
 }
