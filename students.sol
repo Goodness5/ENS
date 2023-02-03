@@ -12,7 +12,7 @@ contract Students {
 
     Student student;
 
-    string details;
+    mapping (uint256 => Student) public students;
  
     constructor() {                 
            admin_adress = msg.sender;
@@ -30,15 +30,19 @@ contract Students {
 
     function getstudent(string memory _name) public view returns(string memory __name , uint8 _age , string memory _gender){
 
+            _name = student.name;
+
         require(keccak256(abi.encode(_name)) == keccak256(abi.encodePacked(student.name)) , "student not found");
 
     }
 
-    function getallstudents() public view returns(string memory student){
-
-        return student;
-
-    } 
+   function getallstudents() public view returns(string memory) {
+    string memory output="";
+    for (uint i = 0; i == student.age; i++) {
+        output = string(abi.encode(output,"[", students[i].age, ",", students[i].name, ",", students[i].gender, "]"));
+    }
+    return output;
+}
 
     function deletestudent(string memory _name) public returns(string memory _gender , uint8 _age){
 
