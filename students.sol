@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.1;
 
 contract Students {    
@@ -10,53 +9,50 @@ contract Students {
         string gender; 
     }
 
-    Student student;
-
     mapping (uint256 => Student) public students;
- 
+
     constructor() {                 
            admin_adress = msg.sender;
-        //    msg.sender = owner;
-               
     } 
 
-    function store_details(string memory _name , uint8 _age , string memory _gender) external{
-
-            _name = student.name;
-            _age = student.age;
-            _gender = student.gender;
-
+    function store_details(string calldata _name , uint8 _age , string calldata _gender) external{
+        uint256 id = students.length;
+        students[id].name = _name;
+        students[id].age = _age;
+        students[id].gender = _gender;
     }
 
     function getstudent(string memory _name) public view returns(string memory __name , uint8 _age , string memory _gender){
-
-            _name = student.name;
-
-        require(keccak256(abi.encode(_name)) == keccak256(abi.encodePacked(student.name)) , "student not found");
-
+        for (uint256 i = 0; i < students.length; i++) {
+            if (students[i].name == _name) {
+                __name = students[i].name;
+                _age = students[i].age;
+                _gender = students[i].gender;
+                return;
+            }
+        }
+        require(false, "student not found");
     }
 
-   function getallstudents() public view returns(string memory) {
-    string memory output="";
-    for (uint i = 0; i == student.age; i++) {
-        output = string(abi.encode(output,"[", students[i].age, ",", students[i].name, ",", students[i].gender, "]"));
+    function getallstudents() public view returns(string memory) {
+        string memory output="";
+        for (uint256 i = 0; i < students.length; i++) {
+            output = string(abi.encode(output,"[", students[i].age, ",", students[i].name, ",", students[i].gender, "]"));
+        }
+        return output;
     }
-    return output;
-}
 
     function deletestudent(string memory _name) public returns(string memory _gender , uint8 _age){
+        require(msg.sender == admin_adress , "not authorized");
 
-        _name = student.name;
-
-        // details = 
-        // _name = student.name ,
-        // _gender = student.gender ,
-        // _age = student.age;
-        require(msg.sender == admin_adress , "not authorised");
-        require(keccak256(abi.encode(_name)) == keccak256(abi.encodePacked(student.name)) , "student not found");
-        delete student.name;
-        delete student.gender;
-        delete student.age;
-        
+        for (uint256 i = 0; i < students.length; i++) {
+            if (students[i].name == _name) {
+                _gender = students[i].gender;
+                _age = students[i].age;
+                delete students[i];
+                return;
+            }
+        }
+        require(false, "student not found");
     }
 }
